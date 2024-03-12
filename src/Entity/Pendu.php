@@ -2,28 +2,36 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
 use App\Repository\PenduRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 
 #[ORM\Entity(repositoryClass: PenduRepository::class)]
-#[ApiResource]
+#[ApiResource(paginationItemsPerPage: 20,
+operations:[new Get(normalizationContext: ['groups' => 'pendu:item']),
+            new GetCollection(normalizationContext: ['groups' => 'pendu:list'])])]
 class Pendu
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['user:list','user:item','pendu:list', 'pendu:item'])]
     private ?int $id = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['user:list','user:item','pendu:list', 'pendu:item'])]
     private ?int $score = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['user:list','user:item','pendu:list', 'pendu:item'])]
     private ?int $scoreTotalPendu = null;
 
     #[ORM\OneToMany(mappedBy: 'scorePendu', targetEntity: User::class)]
+    #[Groups(['user:list','user:item','pendu:list', 'pendu:item'])]
     private Collection $scoreTotal;
 
     public function __construct()

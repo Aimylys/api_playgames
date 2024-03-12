@@ -33,10 +33,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['user:list','user:item','pendu:list', 'pendu:item'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['user:list', 'user:item'])]
+    #[Groups(['user:list','user:item','pendu:list', 'pendu:item'])]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -49,22 +50,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:list', 'user:item'])]
+    #[Groups(['user:list','user:item','pendu:list', 'pendu:item'])]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:list', 'user:item'])]
+    #[Groups(['user:list','user:item','pendu:list', 'pendu:item'])]
     private ?string $prenom = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['user:list', 'user:item'])]
+    #[Groups(['user:list','user:item','pendu:list', 'pendu:item'])]
     private ?\DateTimeInterface $dateInscription = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['user:list', 'user:item'])]
+    #[Groups(['user:list','user:item','pendu:list', 'pendu:item'])]
     private ?int $points = null;
 
     #[ORM\ManyToOne(inversedBy: 'scoreTotal')]
+    #[Groups(['user:list','user:item','pendu:list', 'pendu:item'])]
     private ?Pendu $scorePendu = null;
 
     public function getId(): ?int
