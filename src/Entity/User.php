@@ -65,9 +65,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:list','user:item','pendu:list', 'pendu:item'])]
     private ?int $points = null;
 
-    #[ORM\ManyToOne(inversedBy: 'scoreTotal')]
-    #[Groups(['user:list','user:item','pendu:list', 'pendu:item'])]
-    private ?Pendu $scorePendu = null;
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    private ?scoreTotal $scorePendu = null;
+
+    public function __construct()
+    {
+        $this->scorePendu = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -187,15 +191,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getScorePendu(): ?Pendu
+    /**
+     * @return Collection<int, Pendu>
+     */
+    public function getScorePendu(): Collection
     {
         return $this->scorePendu;
     }
 
-    public function setScorePendu(?Pendu $scorePendu): static
+    public function addScorePendu(Pendu $scorePendu): static
+    {
+        if (!$this->scorePendu->contains($scorePendu)) {
+            $this->scorePendu->add($scorePendu);
+        }
+
+        return $this;
+    }
+
+    public function removeScorePendu(Pendu $scorePendu): static
+    {
+        $this->scorePendu->removeElement($scorePendu);
+
+        return $this;
+    }
+
+    public function setScorePendu(?scoreTotal $scorePendu): static
     {
         $this->scorePendu = $scorePendu;
 
         return $this;
     }
+
 }
