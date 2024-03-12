@@ -60,21 +60,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:list', 'user:item'])]
     private ?\DateTimeInterface $dateInscription = null;
 
-    #[ORM\OneToMany(targetEntity: Mouvement::class, mappedBy: 'joueurId')]
-    private Collection $mouvements;
-
-    #[ORM\OneToMany(targetEntity: Partie::class, mappedBy: 'joueurA')]
-    private Collection $parties;
-
     #[ORM\Column(nullable: true)]
     #[Groups(['user:list', 'user:item'])]
     private ?int $points = null;
 
-    public function __construct()
-    {
-        $this->mouvements = new ArrayCollection();
-        $this->parties = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'scoreTotal')]
+    private ?Pendu $scorePendu = null;
 
     public function getId(): ?int
     {
@@ -182,66 +173,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Mouvement>
-     */
-    public function getMouvements(): Collection
-    {
-        return $this->mouvements;
-    }
-
-    public function addMouvement(Mouvement $mouvement): static
-    {
-        if (!$this->mouvements->contains($mouvement)) {
-            $this->mouvements->add($mouvement);
-            $mouvement->setJoueurId($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMouvement(Mouvement $mouvement): static
-    {
-        if ($this->mouvements->removeElement($mouvement)) {
-            // set the owning side to null (unless already changed)
-            if ($mouvement->getJoueurId() === $this) {
-                $mouvement->setJoueurId(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Partie>
-     */
-    public function getParties(): Collection
-    {
-        return $this->parties;
-    }
-
-    public function addParty(Partie $party): static
-    {
-        if (!$this->parties->contains($party)) {
-            $this->parties->add($party);
-            $party->setJoueurA($this);
-        }
-
-        return $this;
-    }
-
-    public function removeParty(Partie $party): static
-    {
-        if ($this->parties->removeElement($party)) {
-            // set the owning side to null (unless already changed)
-            if ($party->getJoueurA() === $this) {
-                $party->setJoueurA(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getPoints(): ?int
     {
         return $this->points;
@@ -250,6 +181,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPoints(?int $points): static
     {
         $this->points = $points;
+
+        return $this;
+    }
+
+    public function getScorePendu(): ?Pendu
+    {
+        return $this->scorePendu;
+    }
+
+    public function setScorePendu(?Pendu $scorePendu): static
+    {
+        $this->scorePendu = $scorePendu;
 
         return $this;
     }

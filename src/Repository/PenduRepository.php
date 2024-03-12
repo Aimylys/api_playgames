@@ -2,27 +2,27 @@
 
 namespace App\Repository;
 
-use App\Entity\Partie;
+use App\Entity\Pendu;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Partie>
+ * @extends ServiceEntityRepository<Pendu>
  *
- * @method Partie|null find($id, $lockMode = null, $lockVersion = null)
- * @method Partie|null findOneBy(array $criteria, array $orderBy = null)
- * @method Partie[]    findAll()
- * @method Partie[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Pendu|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Pendu|null findOneBy(array $criteria, array $orderBy = null)
+ * @method Pendu[]    findAll()
+ * @method Pendu[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PartieRepository extends ServiceEntityRepository
+class PenduRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Partie::class);
+        parent::__construct($registry, Pendu::class);
     }
 
 //    /**
-//     * @return Partie[] Returns an array of Partie objects
+//     * @return Pendu[] Returns an array of Pendu objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -36,7 +36,7 @@ class PartieRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Partie
+//    public function findOneBySomeField($value): ?Pendu
 //    {
 //        return $this->createQueryBuilder('p')
 //            ->andWhere('p.exampleField = :val')
