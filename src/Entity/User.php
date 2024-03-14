@@ -50,22 +50,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:list','user:item','pendu:list', 'pendu:item'])]
+    #[Groups(['user:list','user:item','pendu:list', 'pendu:item', 'penduscore:item'])]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:list','user:item','pendu:list', 'pendu:item'])]
+    #[Groups(['user:list','user:item','pendu:list', 'pendu:item', 'penduscore:item'])]
     private ?string $prenom = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['user:list','user:item','pendu:list', 'pendu:item'])]
+    #[Groups(['user:list','user:item','pendu:list', 'pendu:item', 'penduscore:item'])]
     private ?\DateTimeInterface $dateInscription = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['user:list','user:item','pendu:list', 'pendu:item'])]
+    #[Groups(['user:list','user:item','pendu:list', 'pendu:item', 'penduscore:item'])]
     private ?int $points = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
+    #[Groups(['user:list','user:item', 'penduscore:item'])]
     private ?scoreTotal $scorePendu = null;
 
     public function __construct()

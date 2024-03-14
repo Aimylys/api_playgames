@@ -19,13 +19,15 @@ class Pendu
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['pendu:list', 'pendu:item'])]
+    #[Groups(['pendu:list', 'pendu:item', 'penduscore:item'])]
     private ?int $id = null;
 
     #[ORM\OneToMany(mappedBy: 'scoreTotal', targetEntity: ScoreTotal::class)]
+    #[Groups(['pendu:list', 'pendu:item', 'penduscore:item'])]
     private Collection $scoreTotals;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['pendu:list', 'pendu:item', 'penduscore:item'])]
     private ?int $score = null;
 
     public function __construct()
