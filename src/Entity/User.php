@@ -68,9 +68,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(inversedBy: 'users')]
     private ?scoreTotal $scorePendu = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Memory::class)]
+    private Collection $scoreMemory;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $totalMemoryScore = null;
+
     public function __construct()
     {
         $this->scorePendu = new ArrayCollection();
+        $this->scoreMemory = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -221,5 +228,54 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Memory>
+     */
+    public function getScoreMemory(): Collection
+    {
+        return $this->scoreMemory;
+    }
+
+    public function addScoreMemory(Memory $scoreMemory): static
+    {
+        if (!$this->scoreMemory->contains($scoreMemory)) {
+            $this->scoreMemory->add($scoreMemory);
+            $scoreMemory->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeScoreMemory(Memory $scoreMemory): static
+    {
+        if ($this->scoreMemory->removeElement($scoreMemory)) {
+            // set the owning side to null (unless already changed)
+            if ($scoreMemory->getUser() === $this) {
+                $scoreMemory->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+    public function getTotalScoreMemory(): int
+    {
+        $totalScore = 0;
+        foreach ($this->scoreMemory as $memory) {
+            $totalScore += $memory->getScoreM();
+        }
+        return $totalScore;
+    }
+
+    public function setTotalMemoryScore(?int $totalMemoryScore): static
+    {
+        $this->totalMemoryScore = $totalMemoryScore;
+
+        return $this;
+    }
+
+    
 
 }
