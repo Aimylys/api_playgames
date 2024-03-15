@@ -2,25 +2,30 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ScoreTotalRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
 
 #[ORM\Entity(repositoryClass: ScoreTotalRepository::class)]
-#[ApiResource]
+#[ApiResource(paginationItemsPerPage: 20,
+operations:[new Get(normalizationContext: ['groups' => 'penduscore:item'])])]
 class ScoreTotal
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['pendu:list', 'pendu:item', 'penduscore:item'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'scoreTotals')]
+    #[Groups(['pendu:list', 'pendu:item', 'penduscore:item','user:item'])]
     private ?Pendu $scoreTotal = null;
 
     #[ORM\OneToMany(mappedBy: 'scorePendu', targetEntity: User::class)]
+    #[Groups(['pendu:list', 'pendu:item', 'penduscore:item','user:item'])]
     private Collection $users;
 
     public function __construct()
