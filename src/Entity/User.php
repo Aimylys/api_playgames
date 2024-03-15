@@ -65,20 +65,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:list','user:item','pendu:list', 'pendu:item', 'penduscore:item'])]
     private ?int $points = null;
 
-    #[ORM\ManyToOne(inversedBy: 'users')]
-    #[Groups(['user:list','user:item', 'penduscore:item'])]
-    private ?scoreTotal $scorePendu = null;
-
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Memory::class)]
     private Collection $scoreMemory;
 
     #[ORM\Column(nullable: true)]
     private ?int $totalMemoryScore = null;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Pendu::class)]
+    private Collection $pendus;
+
+    #[ORM\Column]
+    private ?int $totalPenduScore = null;
+
     public function __construct()
     {
-        $this->scorePendu = new ArrayCollection();
         $this->scoreMemory = new ArrayCollection();
+        $this->pendus = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -199,36 +201,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, Pendu>
-     */
-    public function getScorePendu(): Collection
-    {
-        return $this->scorePendu;
-    }
-
-    public function addScorePendu(Pendu $scorePendu): static
-    {
-        if (!$this->scorePendu->contains($scorePendu)) {
-            $this->scorePendu->add($scorePendu);
-        }
-
-        return $this;
-    }
-
-    public function removeScorePendu(Pendu $scorePendu): static
-    {
-        $this->scorePendu->removeElement($scorePendu);
-
-        return $this;
-    }
-
-    public function setScorePendu(?scoreTotal $scorePendu): static
-    {
-        $this->scorePendu = $scorePendu;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Memory>
@@ -277,6 +249,46 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    
+    /**
+     * @return Collection<int, Pendu>
+     */
+    public function getPendus(): Collection
+    {
+        return $this->pendus;
+    }
+
+    public function addPendu(Pendu $pendu): static
+    {
+        if (!$this->pendus->contains($pendu)) {
+            $this->pendus->add($pendu);
+            $pendu->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removePendu(Pendu $pendu): static
+    {
+        if ($this->pendus->removeElement($pendu)) {
+            // set the owning side to null (unless already changed)
+            if ($pendu->getUser() === $this) {
+                $pendu->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getTotalPenduScore(): ?int
+    {
+        return $this->totalPenduScore;
+    }
+
+    public function setTotalPenduScore(int $totalPenduScore): static
+    {
+        $this->totalPenduScore = $totalPenduScore;
+
+        return $this;
+    }
 
 }

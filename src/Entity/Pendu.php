@@ -22,80 +22,16 @@ class Pendu
     #[Groups(['pendu:list', 'pendu:item', 'penduscore:item'])]
     private ?int $id = null;
 
-    #[ORM\OneToMany(mappedBy: 'scoreTotal', targetEntity: ScoreTotal::class)]
-    #[Groups(['pendu:list', 'pendu:item', 'penduscore:item'])]
-    private Collection $scoreTotals;
-
     #[ORM\Column(nullable: true)]
     #[Groups(['pendu:list', 'pendu:item', 'penduscore:item'])]
     private ?int $score = null;
 
-    public function __construct()
-    {
-        $this->users = new ArrayCollection();
-        $this->scoreTotals = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'pendus')]
+    private ?User $user = null;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    /**
-     * @return Collection<int, User>
-     */
-    public function getUsers(): Collection
-    {
-        return $this->users;
-    }
-
-    public function addUser(User $user): static
-    {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
-            $user->addScorePendu($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUser(User $user): static
-    {
-        if ($this->users->removeElement($user)) {
-            $user->removeScorePendu($this);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, ScoreTotal>
-     */
-    public function getScoreTotals(): Collection
-    {
-        return $this->scoreTotals;
-    }
-
-    public function addScoreTotal(ScoreTotal $scoreTotal): static
-    {
-        if (!$this->scoreTotals->contains($scoreTotal)) {
-            $this->scoreTotals->add($scoreTotal);
-            $scoreTotal->setScoreTotal($this);
-        }
-
-        return $this;
-    }
-
-    public function removeScoreTotal(ScoreTotal $scoreTotal): static
-    {
-        if ($this->scoreTotals->removeElement($scoreTotal)) {
-            // set the owning side to null (unless already changed)
-            if ($scoreTotal->getScoreTotal() === $this) {
-                $scoreTotal->setScoreTotal(null);
-            }
-        }
-
-        return $this;
     }
 
     public function getScore(): ?int
@@ -106,6 +42,18 @@ class Pendu
     public function setScore(?int $score): static
     {
         $this->score = $score;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }
