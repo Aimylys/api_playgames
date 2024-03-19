@@ -7,11 +7,13 @@ use App\Repository\MemoryRepository;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 
 #[ORM\Entity(repositoryClass: MemoryRepository::class)]
 #[ApiResource(paginationItemsPerPage: 20,
 operations:[new Get(normalizationContext: ['groups' => 'memory:item']),
-            new GetCollection(normalizationContext: ['groups' => 'memory:list'])])]
+            new GetCollection(normalizationContext: ['groups' => 'memory:list']),
+            new Post(normalizationContext: ['groups' => 'memory:item']),])]
 class Memory
 {
     #[ORM\Id]
