@@ -20,7 +20,7 @@ operations:[new Get(normalizationContext: ['groups' => 'pendu:item']),
             new GetCollection(normalizationContext: ['groups' => 'pendu:list']),
             new Post(normalizationContext: ['groups' => 'pendu:list']),
             new Put(normalizationContext: ['groups' => 'pendu:item']),
-            new Patch(security: "is_granted('ROLE_ADMIN') or object == user"),
+            new Patch(),
             ])]
 class Pendu
 {

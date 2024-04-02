@@ -24,7 +24,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 operations:[new Get(normalizationContext: ['groups' => 'user:item']),
             new Post(processor: UserStateProcessor::class),
             new GetCollection(normalizationContext: ['groups' => 'user:list']),
-            new Patch(security: "is_granted('ROLE_ADMIN') or object == user")])]
+            new Patch()])]
 #[ApiFilter(SearchFilter::class, properties:['id'=>'exact','email'=>'exact','nom'=> 'exact','prenom'=>'partial'])]
 #[ApiFilter(OrderFilter::class, properties:['points'=> 'DESC'])]
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -57,10 +57,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:list','user:item','pendu:list', 'pendu:item', 'penduscore:item', 'memory:list', 'memory:item'])]
     private ?string $prenom = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['user:list','user:item','pendu:list', 'pendu:item', 'penduscore:item', 'memory:list', 'memory:item'])]
-    private ?\DateTimeInterface $dateInscription = null;
-
     #[ORM\Column(nullable: true)]
     #[Groups(['user:list','user:item','pendu:list', 'pendu:item', 'penduscore:item', 'memory:list', 'memory:item'])]
     private ?int $points = null;
@@ -75,7 +71,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Pendu::class)]
     private Collection $pendus;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?int $totalPenduScore = null;
 
     public function __construct()
@@ -174,18 +170,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPrenom(string $prenom): static
     {
         $this->prenom = $prenom;
-
-        return $this;
-    }
-
-    public function getDateInscription(): ?\DateTimeInterface
-    {
-        return $this->dateInscription;
-    }
-
-    public function setDateInscription(\DateTimeInterface $dateInscription): static
-    {
-        $this->dateInscription = $dateInscription;
 
         return $this;
     }
